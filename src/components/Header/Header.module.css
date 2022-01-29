@@ -1,0 +1,13 @@
+.header {
+  text-align: left;
+  font-size: 30px;
+  display: grid;
+  border-bottom: 5px solid black;
+}
+
+.activeLink {
+  color: red;
+}
+.link {
+  color: black;
+}
