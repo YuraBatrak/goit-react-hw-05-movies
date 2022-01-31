@@ -29,9 +29,7 @@ export default function MoviesPage() {
     if (!searchQuery) {
       return;
     }
-    moviesAPI.fetchMoviesByQuery(searchQuery).then((data) => {
-      setMovies(data);
-    });
+    moviesAPI.fetchMoviesByQuery(searchQuery).then(setMovies);
   }, [searchQuery]);
 
   function onSubmit(searchQuery) {

@@ -3,7 +3,6 @@ import {
   Routes,
   useParams,
   NavLink,
-  useLocation,
   useNavigate,
 } from "react-router-dom";
 import { useState, useEffect, lazy, Suspense } from "react";
@@ -15,7 +14,6 @@ export default function MovieDetailsPage() {
   const [movie, setMovie] = useState(null);
   const { movieId } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     const getMovie = async () => {
@@ -25,23 +23,12 @@ export default function MovieDetailsPage() {
     getMovie();
   }, [movieId]);
 
-  const onGoBack = () => {
-    if (location.pathname === `/movies/${movieId}`) {
-      navigate(-1);
-    }
-    if (location.pathname === `/movies/${movieId}/cast`) {
-      navigate(-2);
-    }
-    if (location.pathname === `/movies/${movieId}/reviews`) {
-      navigate(-2);
-    }
-  };
   return (
     <div>
       {movie && (
         <div>
           <div>
-            <button onClick={onGoBack}>Go Back</button>
+            <button onClick={() => navigate(-1)}>Go Back</button>
             <div>
               <img
                 src={
