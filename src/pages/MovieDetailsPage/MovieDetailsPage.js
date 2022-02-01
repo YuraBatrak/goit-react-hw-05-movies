@@ -4,6 +4,7 @@ import {
   useParams,
   NavLink,
   useNavigate,
+  useLocation,
 } from "react-router-dom";
 import { useState, useEffect, lazy, Suspense } from "react";
 import * as moviesAPI from "../../Api";
@@ -13,8 +14,11 @@ const Reviews = lazy(() => import("../Reviews/Reviews.js"));
 export default function MovieDetailsPage() {
   const [movie, setMovie] = useState(null);
   const { movieId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
-
+  const onGoBack = () => {
+    navigate(location?.state?.from ?? "/");
+  };
   useEffect(() => {
     const getMovie = async () => {
       const currentMovie = await moviesAPI.fetchMovieById(movieId);
@@ -28,7 +32,7 @@ export default function MovieDetailsPage() {
       {movie && (
         <div>
           <div>
-            <button onClick={() => navigate(-1)}>Go Back</button>
+            <button onClick={onGoBack}>Go Back</button>
             <div>
               <img
                 src={
@@ -54,10 +58,17 @@ export default function MovieDetailsPage() {
             <h3>Additional Information</h3>
             <ul>
               <li>
-                <NavLink to={{ pathname: "cast" }}>Cast</NavLink>
+                <NavLink to={`/movies/${movie.id}/cast`} state={location.state}>
+                  Cast
+                </NavLink>
               </li>
               <li>
-                <NavLink to={{ pathname: "reviews" }}>Reviews</NavLink>
+                <NavLink
+                  to={`/movies/${movie.id}/reviews`}
+                  state={location.state}
+                >
+                  Reviews
+                </NavLink>
               </li>
             </ul>
             <Suspense fallback={<h1>Loading...</h1>}>

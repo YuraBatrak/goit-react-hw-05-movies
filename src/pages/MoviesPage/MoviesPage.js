@@ -13,7 +13,7 @@ export default function MoviesPage() {
 
   const navigate = useNavigate();
   const location = useLocation();
-
+  const query = new URLSearchParams(location.search).get("query") ?? "";
   const handleSubmit = (event) => {
     event.preventDefault();
     storage.save("searchQuery", searchQuery);
@@ -23,14 +23,16 @@ export default function MoviesPage() {
       return;
     }
     onSubmit(searchQuery);
+    event.preventDefault();
   };
 
   useEffect(() => {
-    if (!searchQuery) {
+    if (!query) {
       return;
     }
-    moviesAPI.fetchMoviesByQuery(searchQuery).then(setMovies);
-  }, [searchQuery]);
+
+    moviesAPI.fetchMoviesByQuery(query).then(setMovies);
+  }, [query]);
 
   function onSubmit(searchQuery) {
     navigate({ ...location, search: `query=${searchQuery}` });
@@ -65,7 +67,9 @@ export default function MoviesPage() {
         ) : (
           movies.results.map((res) => (
             <nav key={res.id}>
-              <Link to={`/movies/${res.id}`}>{res.title}</Link>
+              <Link to={`/movies/${res.id}`} state={{ from: location }}>
+                {res.title}
+              </Link>
             </nav>
           ))
         ))}
